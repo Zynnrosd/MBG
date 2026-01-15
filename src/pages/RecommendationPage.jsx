@@ -42,9 +42,9 @@ export default function RecommendationPage() {
     <div className="max-w-xl mx-auto p-6 space-y-8 pb-32 min-h-screen bg-[#F8FAFC]">
       <header className="space-y-2">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider">
-          <Zap size={12} fill="currentColor" /> AI Nutrition Assistant
+          <Zap size={12} fill="currentColor" /> Nutrition Assistant
         </div>
-        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Cek Gizi <span className="text-blue-600">Malam.</span></h1>
+        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Rekomendasi <span className="text-blue-600">Gizi.</span></h1>
       </header>
 
       {!recommendation ? (
