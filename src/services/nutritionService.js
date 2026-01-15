@@ -29,19 +29,19 @@ class NutritionService {
 
   async getDinnerRecommendation(targetCal) {
     const data = await this.getAllNutrisi();
-    const blacklist = ['enting', 'wijen', 'kerupuk', 'permen', 'kue', 'biskuit', 'snack', 'nasi', 'cokelat'];
-    const priority = ['ikan', 'ayam', 'telur', 'daging', 'hati', 'tempe', 'tahu', 'lele'];
+    // Buang camilan dan nasi dari rekomendasi malam
+    const blacklist = ['enting', 'wijen', 'kerupuk', 'permen', 'kue', 'biskuit', 'snack', 'nasi', 'cokelat', 'keripik', 'sambal'];
+    const priority = ['ikan', 'ayam', 'telur', 'daging', 'hati', 'tempe', 'tahu', 'lele', 'bebek'];
 
-    // Filter lauk utama yang bukan camilan dan protein > 5g
     let mainDishes = data.filter(i => {
       const nameLower = i.name.toLowerCase();
       const isBlacklisted = blacklist.some(word => nameLower.includes(word));
-      return !isRice && !isBlacklisted && i.proteins > 5;
+      return !isBlacklisted && i.proteins > 4; // Minimal protein 4g
     });
 
     let suggestions = mainDishes.filter(i => {
       const isPriority = priority.some(word => i.name.toLowerCase().includes(word));
-      return isPriority && i.calories <= (targetCal + 50);
+      return isPriority && i.calories <= (targetCal + 100);
     });
 
     if (suggestions.length < 3) suggestions = [...suggestions, ...mainDishes.filter(i => i.calories <= targetCal)];

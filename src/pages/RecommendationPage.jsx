@@ -1,7 +1,7 @@
 // src/pages/RecommendationPage.jsx
 import { useState, useEffect } from 'react';
 import nutritionService from '../services/nutritionService';
-import { Search, Calculator, CheckCircle, RefreshCw, ArrowRight, User, Info } from 'lucide-react';
+import { Search, Calculator, CheckCircle, RefreshCw, ArrowRight, User, Info, Zap, ChevronRight } from 'lucide-react';
 
 export default function RecommendationPage() {
   const [formData, setFormData] = useState({ age: '', weight: '', height: '' });
@@ -27,10 +27,9 @@ export default function RecommendationPage() {
     setLoading(true);
     try {
       const targetDaily = 1000 + (parseInt(formData.age) * 100);
-      const breakfastEst = targetDaily * 0.25;
-      const lunchRiceEst = 130; // Estimasi nasi sekolah
+      const breakfastEst = targetDaily * 0.25; 
+      const lunchRiceEst = 130; 
       let remaining = targetDaily - breakfastEst - (selectedLunch.calories + lunchRiceEst);
-      
       const minDinner = targetDaily * 0.25;
       if (remaining < minDinner) remaining = minDinner;
 
@@ -40,85 +39,120 @@ export default function RecommendationPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-8 pb-28 min-h-screen bg-white">
-      <header>
-        <h1 className="text-3xl font-bold text-slate-900">Analisis Gizi</h1>
-        <p className="text-slate-500 mt-1">Estimasi kebutuhan malam berdasarkan MBG siang.</p>
+    <div className="max-w-xl mx-auto p-6 space-y-8 pb-32 min-h-screen bg-[#F8FAFC]">
+      <header className="space-y-2">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider">
+          <Zap size={12} fill="currentColor" /> AI Nutrition Assistant
+        </div>
+        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Cek Gizi <span className="text-blue-600">Malam.</span></h1>
       </header>
 
       {!recommendation ? (
-        <form onSubmit={handleCalculate} className="space-y-6">
-          {/* Section Data Fisik */}
-          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 space-y-4">
-            <div className="flex items-center gap-2 text-blue-600 font-bold mb-2">
-              <User size={18} /> <span>Data Fisik Anak</span>
-            </div>
-            <div className="grid grid-cols-3 gap-3">
+        <form onSubmit={handleCalculate} className="space-y-6 animate-in fade-in duration-500">
+          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm space-y-6">
+            <h3 className="font-bold text-slate-800 flex items-center gap-2 text-lg">
+              <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-200">
+                <User size={16} />
+              </div>
+              Data Fisik Anak
+            </h3>
+            <div className="grid grid-cols-3 gap-4">
               {['age', 'weight', 'height'].map(key => (
-                <input key={key} type="number" placeholder={key === 'age' ? 'Usia' : key === 'weight' ? 'BB (Kg)' : 'TB (Cm)'}
-                  className="w-full p-3 bg-white border border-slate-100 rounded-2xl text-sm focus:border-blue-500 outline-none" required
-                  onChange={e => setFormData({...formData, [key]: e.target.value})} />
+                <div key={key} className="space-y-2">
+                  <label className="text-[10px] font-bold text-slate-400 uppercase ml-2 tracking-widest">{key === 'age' ? 'Usia' : key === 'weight' ? 'BB' : 'TB'}</label>
+                  <input type="number" placeholder={key === 'age' ? 'Thn' : key === 'weight' ? 'Kg' : 'Cm'}
+                    className="w-full p-4 bg-slate-50 border-transparent rounded-2xl text-sm font-bold focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all outline-none" required
+                    onChange={e => setFormData({...formData, [key]: e.target.value})} />
+                </div>
               ))}
             </div>
           </div>
 
-          {/* Section Menu Siang */}
-          <div className="bg-slate-50 border border-slate-100 rounded-3xl p-6 space-y-4 relative">
-            <div className="flex items-center gap-2 text-blue-600 font-bold mb-2">
-              <Calculator size={18} /> <span>Lauk MBG Siang</span>
-            </div>
-            <div className="relative">
-              <Search className="absolute left-4 top-3.5 text-slate-400" size={18} />
-              <input type="text" placeholder="Cari lauk sekolah..." 
-                className="w-full pl-11 p-3 bg-white border border-slate-100 rounded-2xl text-sm outline-none focus:border-blue-500"
+          <div className="bg-white border border-slate-100 rounded-[2.5rem] p-8 shadow-sm space-y-6 relative">
+            <h3 className="font-bold text-slate-800 flex items-center gap-2 text-lg">
+              <div className="w-8 h-8 rounded-xl bg-orange-500 flex items-center justify-center text-white shadow-lg shadow-orange-200">
+                <Calculator size={16} />
+              </div>
+              Lauk MBG Siang
+            </h3>
+            <div className="relative group">
+              <Search className="absolute left-4 top-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={20} />
+              <input type="text" placeholder="Lauk apa siang tadi?" 
+                className="w-full pl-12 p-4 bg-slate-50 border-transparent rounded-2xl text-sm font-medium outline-none focus:bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-50 transition-all"
                 value={searchTerm} onChange={e => {setSearchTerm(e.target.value); setSelectedLunch(null);}} />
             </div>
 
             {results.length > 0 && !selectedLunch && (
-              <div className="absolute z-10 left-6 right-6 bg-white border border-slate-100 mt-1 rounded-2xl shadow-xl max-h-48 overflow-y-auto">
+              <div className="absolute z-10 left-8 right-8 bg-white/80 backdrop-blur-xl border border-slate-100 mt-2 rounded-3xl shadow-2xl max-h-56 overflow-y-auto p-2">
                 {results.map(f => (
                   <button key={f.id} type="button" onClick={() => {setSelectedLunch(f); setSearchTerm(f.name);}}
-                    className="w-full text-left p-3 hover:bg-blue-50 border-b border-slate-50 last:border-0 text-sm">
-                    <p className="font-bold">{f.name}</p>
-                    <p className="text-[10px] text-slate-400">{f.calories} kkal</p>
+                    className="w-full text-left p-4 hover:bg-blue-600 hover:text-white rounded-2xl flex justify-between items-center transition-all group">
+                    <div>
+                      <p className="font-bold text-sm">{f.name}</p>
+                      <p className="text-[10px] opacity-60">{f.calories} kkal</p>
+                    </div>
+                    <ChevronRight size={16} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
               </div>
             )}
 
             {selectedLunch && (
-              <div className="bg-blue-600 p-4 rounded-2xl text-white flex justify-between items-center animate-in zoom-in duration-300">
-                <div className="text-sm font-bold flex items-center gap-2"><CheckCircle size={16}/> {selectedLunch.name}</div>
-                <button type="button" onClick={() => {setSelectedLunch(null); setSearchTerm('');}} className="text-[10px] font-bold underline opacity-80">Ganti</button>
+              <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-5 rounded-3xl text-white flex justify-between items-center animate-in zoom-in duration-300 shadow-xl shadow-blue-200">
+                <div className="flex items-center gap-3">
+                  <div className="bg-white/20 p-2 rounded-xl"><CheckCircle size={20}/></div>
+                  <div className="text-sm font-bold tracking-tight">{selectedLunch.name}</div>
+                </div>
+                <button type="button" onClick={() => {setSelectedLunch(null); setSearchTerm('');}} className="text-[10px] font-black uppercase tracking-tighter bg-white text-blue-600 px-4 py-2 rounded-xl">Ganti</button>
               </div>
             )}
           </div>
 
           <button type="submit" disabled={!selectedLunch || loading}
-            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg shadow-blue-100 flex items-center justify-center gap-2 active:scale-[0.98] transition-all disabled:opacity-50">
-            {loading ? <RefreshCw className="animate-spin" /> : <>Hitung Rekomendasi <ArrowRight size={18}/></>}
+            className="w-full bg-slate-900 text-white py-5 rounded-[2rem] font-bold shadow-2xl shadow-slate-200 flex items-center justify-center gap-3 active:scale-95 transition-all disabled:opacity-30">
+            {loading ? <RefreshCw className="animate-spin" /> : <>Lihat Hasil Analisis <ArrowRight size={20}/></>}
           </button>
         </form>
       ) : (
-        <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-500">
-          <div className="bg-blue-600 text-white p-8 rounded-3xl shadow-xl text-center space-y-2">
-            <p className="text-xs font-bold opacity-70 tracking-widest uppercase">Target Kalori Malam</p>
-            <h2 className="text-5xl font-bold">{recommendation.remaining} <span className="text-lg opacity-60">kkal</span></h2>
-            <p className="text-[10px] opacity-60 italic pt-2">*Sudah termasuk estimasi Sarapan & Nasi Sekolah</p>
+        <div className="space-y-8 animate-in slide-in-from-bottom-10 duration-700">
+          <div className="bg-slate-900 text-white p-10 rounded-[3rem] shadow-2xl relative overflow-hidden group">
+            <div className="absolute -top-12 -right-12 w-48 h-48 bg-blue-600 rounded-full blur-[80px] opacity-40 group-hover:opacity-60 transition-opacity" />
+            <div className="relative z-10 space-y-4">
+              <p className="text-[11px] font-black opacity-40 uppercase tracking-[0.4em]">Target Malam Hari</p>
+              <h2 className="text-7xl font-bold tracking-tighter">{recommendation.remaining}<span className="text-2xl opacity-30 font-medium ml-2">kcal</span></h2>
+              <div className="pt-8 mt-4 border-t border-white/10 flex justify-between items-end">
+                <div className="space-y-1">
+                  <p className="text-[10px] opacity-40 uppercase font-black">Status Gizi</p>
+                  <p className="text-sm font-bold text-green-400 flex items-center gap-2"><div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" /> Seimbang</p>
+                </div>
+                <div className="text-right">
+                  <p className="text-[10px] opacity-40 uppercase font-black tracking-widest">Kebutuhan Harian</p>
+                  <p className="text-xl font-bold">{recommendation.targetDaily} <span className="text-xs opacity-40">kcal</span></p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="space-y-3">
-            <h3 className="font-bold text-slate-900 ml-1 text-sm">Saran Lauk Pendamping Nasi</h3>
-            <div className="grid grid-cols-1 gap-3">
+          <div className="space-y-5">
+            <div className="flex items-center justify-between px-2">
+              <h3 className="font-extrabold text-slate-800 text-xl tracking-tight">Saran Pendamping</h3>
+              <div className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-[10px] font-black">HIGH PROTEIN</div>
+            </div>
+            <div className="grid grid-cols-1 gap-4">
               {recommendation.suggestions.map(s => (
-                <div key={s.id} className="bg-slate-50 p-4 rounded-3xl border border-slate-100 flex items-center gap-4">
-                  <img src={s.image} className="w-16 h-16 rounded-2xl object-cover bg-white p-1" alt={s.name} />
-                  <div>
-                    <h4 className="font-bold text-slate-800 text-sm">{s.name}</h4>
-                    <p className="text-blue-600 text-xs font-bold">{s.calories} kkal <span className="text-slate-300 px-1">|</span> {s.proteins}g Prot</p>
-                    <div className="mt-1 flex gap-1">
-                       {s.proteins > 15 && <span className="text-[8px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold uppercase">Stunting Defense</span>}
-                       {(s.name.toLowerCase().includes('hati') || s.name.toLowerCase().includes('daging')) && <span className="text-[8px] bg-red-100 text-red-700 px-2 py-0.5 rounded-md font-bold uppercase">Zat Besi</span>}
+                <div key={s.id} className="bg-white p-5 rounded-[2.5rem] border border-slate-100 flex items-center gap-5 shadow-sm hover:shadow-xl transition-all group">
+                  <div className="w-24 h-24 rounded-[2rem] overflow-hidden bg-slate-50 border border-slate-100 shrink-0 shadow-inner">
+                    <img src={s.image} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={s.name} />
+                  </div>
+                  <div className="flex-1 space-y-2">
+                    <h4 className="font-bold text-slate-800 text-lg leading-tight">{s.name}</h4>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black text-blue-600 bg-blue-50 px-3 py-1 rounded-full">{s.calories} kcal</span>
+                      <span className="text-xs font-black text-orange-600 bg-orange-50 px-3 py-1 rounded-full">{s.proteins}g Prot</span>
+                    </div>
+                    <div className="flex gap-1 pt-1">
+                       {s.proteins > 15 && <span className="text-[9px] font-black bg-green-50 text-green-600 px-2 py-1 rounded-md uppercase tracking-wider">Cegah Stunting</span>}
+                       {(s.name.toLowerCase().includes('hati') || s.name.toLowerCase().includes('daging')) && <span className="text-[9px] font-black bg-red-50 text-red-600 px-2 py-1 rounded-md uppercase tracking-wider">Tinggi Zat Besi</span>}
                     </div>
                   </div>
                 </div>
@@ -126,16 +160,14 @@ export default function RecommendationPage() {
             </div>
           </div>
 
-          <button onClick={() => setRecommendation(null)} className="w-full py-4 text-slate-400 font-bold text-xs hover:text-blue-600 transition-colors">
-            Hitung Ulang
-          </button>
+          <button onClick={() => setRecommendation(null)} className="w-full py-6 text-slate-400 font-bold text-xs hover:text-blue-600 transition-colors uppercase tracking-[0.3em]">Hitung Ulang Analisis</button>
         </div>
       )}
 
-      <div className="bg-amber-50 p-4 rounded-3xl border border-amber-100 flex gap-3">
-        <Info className="text-amber-600 shrink-0" size={20} />
-        <p className="text-[10px] text-amber-800 leading-relaxed font-medium">
-          Rekomendasi berfokus pada asupan <b>Protein Hewani & Zat Besi</b> untuk melengkapi gizi harian si kecil. Pastikan disajikan bersama porsi nasi yang cukup di rumah.
+      <div className="bg-blue-50/50 p-8 rounded-[3rem] border border-blue-100/50 flex gap-5 backdrop-blur-sm">
+        <Info className="text-blue-600 shrink-0" size={28} />
+        <p className="text-[12px] text-slate-600 leading-relaxed font-medium">
+          Rekomendasi ini disusun secara cerdas untuk melengkapi asupan <strong className="text-blue-900">Protein Hewani</strong> yang krusial bagi tumbuh kembang si kecil. Sajikan bersama karbohidrat yang tersedia di rumah.
         </p>
       </div>
     </div>

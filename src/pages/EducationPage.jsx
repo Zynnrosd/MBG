@@ -1,43 +1,54 @@
 // src/pages/EducationPage.jsx
-import { Sparkles, ArrowUpRight } from 'lucide-react';
+import { Sparkles, Brain, Apple, Moon, ChevronRight } from 'lucide-react';
 
 export default function EducationPage() {
-  const funFacts = [
-    { title: 'Super Protein', content: 'Satu butir telur mengandung protein setara segelas susu.', icon: '🍳', color: 'from-yellow-400 to-orange-400' },
-    { title: 'Cerdas Ikan', content: 'Ikan kembung punya Omega-3 lebih tinggi dari Salmon.', icon: '🐟', color: 'from-blue-400 to-indigo-400' },
-    { title: 'Zat Besi', content: 'Bayam gelap bantu cegah anak lemas saat belajar.', icon: '🥦', color: 'from-green-400 to-emerald-400' },
-    { title: 'Hormon Tinggi', content: 'Tidur 10 jam bantu hormon pertumbuhan maksimal.', icon: '🌙', color: 'from-purple-400 to-pink-400' }
+  const facts = [
+    { title: 'Super Protein', content: 'Satu butir telur mengandung protein setara segelas susu.', icon: Apple, color: 'text-orange-600 bg-orange-50 border-orange-100' },
+    { title: 'Ikan Cerdas', content: 'Ikan kembung punya Omega-3 lebih tinggi dari Salmon.', icon: Brain, color: 'text-blue-600 bg-blue-50 border-blue-100' },
+    { title: 'Zat Besi', content: 'Bayam gelap bantu cegah anak lemas saat belajar.', icon: Sparkles, color: 'text-green-600 bg-green-50 border-green-100' },
+    { title: 'Istirahat', content: 'Tidur 10 jam bantu hormon pertumbuhan bekerja maksimal.', icon: Moon, color: 'text-purple-600 bg-purple-50 border-purple-100' }
   ];
 
   return (
-    <div className="p-5 max-w-xl mx-auto space-y-10 pb-28 min-h-screen">
+    <div className="max-w-xl mx-auto p-6 space-y-8 pb-32 min-h-screen bg-white">
       <header className="space-y-2">
-        <h1 className="text-4xl font-black text-slate-900">EduGizi<span className="text-blue-600">.</span></h1>
-        <p className="text-slate-500 font-medium">Fakta cepat untuk tumbuh kembang anak.</p>
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-600 text-[10px] font-bold uppercase tracking-wider">
+          <Sparkles size={12} fill="currentColor" /> Daily Insight
+        </div>
+        <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">Info <span className="text-blue-600">Gizi.</span></h1>
+        <p className="text-slate-500 font-medium">Edukasi cerdas untuk tumbuh kembang optimal.</p>
       </header>
 
-      <div className="grid grid-cols-1 gap-6">
-        {funFacts.map((fact, i) => (
-          <div key={i} className="group relative bg-white p-1 rounded-[2.5rem] shadow-sm hover:shadow-xl transition-all duration-500 overflow-hidden">
-            <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${fact.color} blur-[60px] opacity-20 group-hover:opacity-40 transition-opacity`} />
-            <div className="relative bg-white rounded-[2.4rem] p-6 flex gap-6 items-center">
-              <div className="text-4xl bg-slate-50 w-20 h-20 flex items-center justify-center rounded-3xl shadow-inner shrink-0 group-hover:rotate-6 transition-transform">
-                {fact.icon}
+      <div className="grid grid-cols-1 gap-5">
+        {facts.map((fact, i) => {
+          const Icon = fact.icon;
+          return (
+            <div key={i} className={`p-8 rounded-[2.8rem] border flex gap-8 items-center group hover:bg-white hover:shadow-2xl hover:scale-[1.02] transition-all duration-500 ${fact.color} border-transparent`}>
+              <div className={`w-20 h-20 rounded-3xl flex items-center justify-center shrink-0 bg-white shadow-xl group-hover:rotate-6 transition-transform`}>
+                <Icon size={32} />
               </div>
-              <div className="space-y-1 flex-1">
-                <h3 className="font-black text-lg text-slate-800 tracking-tight">{fact.title}</h3>
+              <div className="space-y-2 flex-1">
+                <h3 className="font-extrabold text-xl text-slate-800 tracking-tight">{fact.title}</h3>
                 <p className="text-sm text-slate-600 leading-relaxed font-medium opacity-80">{fact.content}</p>
               </div>
-              <ArrowUpRight className="text-slate-200 group-hover:text-blue-500 transition-colors" size={24} />
+              <div className="w-10 h-10 rounded-full bg-white/50 flex items-center justify-center text-slate-400 group-hover:bg-blue-600 group-hover:text-white transition-all shadow-sm">
+                <ChevronRight size={20} />
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
-      <div className="bg-slate-900 p-8 rounded-[3rem] text-center text-white space-y-4">
-        <Sparkles className="mx-auto text-blue-400" size={32} />
-        <h2 className="text-xl font-black">Update Mingguan</h2>
-        <p className="text-xs text-slate-400 leading-relaxed font-medium italic">Fakta gizi akan diperbarui secara berkala berdasarkan jurnal nutrisi terbaru.</p>
+      <div className="bg-slate-900 p-10 rounded-[3rem] text-center text-white space-y-6 shadow-2xl relative overflow-hidden group">
+         <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-blue-600 rounded-full blur-[80px] opacity-30 group-hover:opacity-50 transition-opacity" />
+         <div className="relative z-10 space-y-4">
+            <h2 className="text-2xl font-black italic tracking-tighter leading-tight">"Nutrisi terbaik hari ini adalah investasi masa depan hebat mereka."</h2>
+            <div className="flex justify-center items-center gap-2">
+              <div className="h-px w-8 bg-white/20" />
+              <p className="text-[10px] font-black uppercase tracking-[0.4em] opacity-40">Healthy Generation</p>
+              <div className="h-px w-8 bg-white/20" />
+            </div>
+         </div>
       </div>
     </div>
   );
