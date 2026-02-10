@@ -3,9 +3,9 @@ import { MessageCircle, Star, ShieldCheck, Clock, Check } from 'lucide-react';
 
 export default function ConsultationPage() {
   const doctors = [
-    { name: 'dr. Rentot Sp.GK', exp: '8 Thn', rate: '4.9', category: 'Spesialis Gizi', online: true },
-    { name: 'dr. Angga Sp.GK', exp: '5 Thn', rate: '4.8', category: 'Spesialis Gizi', online: false },
-    { name: 'Nutr. Velapeli M.Gz', exp: '10 Thn', rate: '2.0', category: 'Nutritionist', online: true },
+    { name: 'dr. Tirta Sp.GK', exp: '8 Thn', rate: '4.9', category: 'Spesialis Gizi', online: true },
+    { name: 'dr. Velayaty Sp.GK', exp: '5 Thn', rate: '4.8', category: 'Spesialis Gizi', online: false },
+    { name: 'Nutr. Alin M.Gz', exp: '10 Thn', rate: '4.0', category: 'Nutritionist', online: true },
   ];
 
   return (
