@@ -1,4 +1,5 @@
 @import "tailwindcss";
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @theme {
@@ -55,4 +56,15 @@
   .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
+=======
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+>>>>>>> 8db79ea4a2f3e842d03b12812063d89fbf5596e9
 }
